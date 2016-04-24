@@ -2,9 +2,8 @@ require 'open-uri'
 require 'nokogiri'
 
 class TimsParser
-  @url = 'https://data.tfl.gov.uk/tfl/syndication/feeds/tims_feed.xml?app_id=5ab7117a&app_key=e975ed062b4650c6b17c180fd02712db' 
-
   def initialize(url = nil)
+    @url = 'https://data.tfl.gov.uk/tfl/syndication/feeds/tims_feed.xml?app_id=5ab7117a&app_key=e975ed062b4650c6b17c180fd02712db' 
     @url = url if url
     @doc = Nokogiri::XML.parse(open(@url)) do |config|
       config.noblanks
@@ -30,7 +29,7 @@ class TimsParser
       # TODO: parse either bounndry or street
       effected_areas << parse_street_coordinate_list(street_coordinates) if street_coordinates
     end
-    
+
     {disruption_points: disruption_points, effected_areas: effected_areas}
   end	
 
