@@ -18,11 +18,12 @@ class TimsParser
 
     coll.css("Disruptions").children.each do |disruption|
       disruption_point = []
-      # TODO: use at_css for single values
-      coordinatesLL = disruption.css("CauseArea DisplayPoint Point coordinatesLL")[0]
-      street_coordinates = disruption.css("CauseArea Streets Street Link Line coordinatesLL")
-      title = disruption.css("location")[0]
-      comment = disruption.css("comments")[0]
+
+      coordinatesLL = get_disruption_coordinates(disruption)
+      street_coordinates = get_street_coordinates(disruption)
+      title = disruption.at_css("location")
+      comment = disruption.at_css("comments")
+
       disruption_point << get_description(title, comment) 
       disruption_point << parse_coordinates(coordinatesLL.content) if coordinatesLL
       disruption_points << disruption_point.flatten
@@ -30,13 +31,18 @@ class TimsParser
       effected_areas << parse_street_coordinate_list(street_coordinates) if street_coordinates
     end
 
-    disruption_points = [['Bondi Beach', -33.890542, 151.274856], ['Coogee Beach', -33.923036, 151.259052]]
-    effected_areas = [[-33.90542, 151.284856,-34.890542, 152.274856], [-34.12, 151.959052, -34.923036, 151.959052]]
-
     {disruption_points: disruption_points, effected_areas: effected_areas}
   end	
 
   private
+    def get_disruption_coordinates(disruption)
+      disruption.at_css("CauseArea DisplayPoint Point coordinatesLL")
+    end
+
+    def get_street_coordinates(disruption)
+      disruption.css("CauseArea Streets Street Link Line coordinatesLL")
+    end
+
     def parse_coordinates(coordinates)
       coordinates.split(',').reverse
     end
