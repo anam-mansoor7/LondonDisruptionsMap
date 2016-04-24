@@ -14,15 +14,22 @@ $(document).ready(function() {
 
   var map = new google.maps.Map($("#map")[0], myOptions);
   var bounds = new google.maps.LatLngBounds();
-    var locations = [
-  ['Bondi Beach', -33.890542, 151.274856, 4],
-  ['Coogee Beach', -33.923036, 151.259052, 5],
-  ['Cronulla Beach', -34.028249, 151.157507, 3],
-  ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
-  ['Maroubra Beach', -33.950198, 151.259302, 1]
-	];
-	draw_markers(locations);
 
+  $.ajax({
+    type: 'GET',
+    url: 'http://localhost:9292/get_disruptions',
+    crossDomain: true,
+    data: '',
+    dataType: "json",
+    success: function(responseData, textStatus, jqXHR) {
+      console.log('POST success.' + responseData['disruption_points']);
+      draw_markers(responseData['disruption_points'])
+    },
+    error: function (responseData, textStatus, errorThrown) {
+      console.log('POST failed.' + textStatus);
+    }
+  });
+  
   function draw_markers(locations){
     var infowindow = new google.maps.InfoWindow({
       maxWidth: 160
