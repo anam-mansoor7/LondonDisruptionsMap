@@ -24,6 +24,7 @@ $(document).ready(function() {
     success: function(responseData, textStatus, jqXHR) {
       console.log('POST success.' + responseData['disruption_points']);
       draw_markers(responseData['disruption_points'])
+      draw_polygon(responseData['effected_areas'])
     },
     error: function (responseData, textStatus, errorThrown) {
       console.log('POST failed.' + textStatus);
@@ -61,6 +62,30 @@ $(document).ready(function() {
       bounds.extend(markers[i].position);
     }
     //  Fit these bounds to the map
+    map.fitBounds(bounds);
+  }
+
+  function draw_polygon(effected_areas){
+    var polygons = [];
+    for (var i = 0; i < effected_areas.length; i++) {
+      arr = [];
+      var effected_area = effected_areas[i];
+      for (var j=0; j < effected_area.length; j = j+2) {
+        arr.push( new google.maps.LatLng(effected_area[j], effected_area[j+1]));
+        console.log(effected_area[j])
+        console.log(effected_area[j+1])
+        bounds.extend(arr[arr.length-1])
+      }
+      polygons.push(new google.maps.Polygon({
+        paths: arr,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35
+      }));
+      polygons[polygons.length-1].setMap(map);
+    }
     map.fitBounds(bounds);
   }
 });
