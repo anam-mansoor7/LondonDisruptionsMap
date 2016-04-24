@@ -14,23 +14,7 @@ $(document).ready(function() {
 
   var map = new google.maps.Map($("#map")[0], myOptions);
   var bounds = new google.maps.LatLngBounds();
-
-  $.ajax({
-    type: 'GET',
-    url: 'http://localhost:9292/get_disruptions',
-    crossDomain: true,
-    data: '',
-    dataType: "json",
-    success: function(responseData, textStatus, jqXHR) {
-      console.log('POST success.' + responseData['disruption_points']);
-      draw_markers(responseData['disruption_points'])
-      draw_polygon(responseData['effected_areas'])
-    },
-    error: function (responseData, textStatus, errorThrown) {
-      console.log('POST failed.' + textStatus);
-    }
-  });
-  
+ 
   function draw_markers(locations){
     var infowindow = new google.maps.InfoWindow({
       maxWidth: 160
@@ -53,16 +37,6 @@ $(document).ready(function() {
         }
       })(marker, i));
     }
-    auto_center(markers);
-  }
-
-  function auto_center(markers) {
-    //  Go through each...
-    for (var i = 0; i < markers.length; i++) {  
-      bounds.extend(markers[i].position);
-    }
-    //  Fit these bounds to the map
-    map.fitBounds(bounds);
   }
 
   function draw_polygon(effected_areas){
@@ -72,8 +46,8 @@ $(document).ready(function() {
       var effected_area = effected_areas[i];
       for (var j=0; j < effected_area.length; j = j+2) {
         arr.push( new google.maps.LatLng(effected_area[j], effected_area[j+1]));
-        console.log(effected_area[j])
-        console.log(effected_area[j+1])
+        // console.log(effected_area[j])
+        // console.log(effected_area[j+1])
         bounds.extend(arr[arr.length-1])
       }
       polygons.push(new google.maps.Polygon({
@@ -88,4 +62,26 @@ $(document).ready(function() {
     }
     map.fitBounds(bounds);
   }
+
+  var get_disruptions_data = function() {
+	  $.ajax({
+	    type: 'GET',
+	    url: 'http://localhost:9292/get_disruptions',
+	    crossDomain: true,
+	    data: '',
+	    dataType: "json",
+	    success: function(responseData, textStatus, jqXHR) {
+	      // console.log('POST success.' + responseData['disruption_points']);
+	      draw_markers(responseData['disruption_points'])
+	      draw_polygon(responseData['effected_areas'])
+	    },
+	    error: function (responseData, textStatus, errorThrown) {
+	      // console.log('POST failed.' + textStatus);
+	    }
+	  })
+	;};
+
+  get_disruptions_data();
+  var interval = 1000 * 60 * 5; 
+  setInterval(get_disruptions_data, interval);
 });
