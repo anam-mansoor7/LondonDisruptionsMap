@@ -14,9 +14,9 @@ class TimsParser
   def run
     disruption_points = []
     effected_areas = []
-    coll = @doc.css("Root")
+    root = @doc.css("Root")
 
-    coll.css("Disruptions").children.each do |disruption|
+    root.css("Disruptions").children.each do |disruption|
       disruption_point = []
 
       coordinatesLL = get_disruption_coordinates(disruption)
@@ -30,7 +30,7 @@ class TimsParser
       # TODO: parse either bounndry or street
       effected_areas << parse_street_coordinate_list(street_coordinates) if street_coordinates
     end
-
+    
     {disruption_points: disruption_points, effected_areas: effected_areas}
   end	
 
