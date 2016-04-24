@@ -17,6 +17,12 @@ class DisruptionsMapAppTest < Minitest::Spec
     assert last_response.body.include?('London Traffic Disruptions Map')
   end
 
+  #TODO: mock the data to return  {effected_areas: effected_areas,disruption_points: disruption_points}  
+  # effected_areas = [[-33.90542, 151.284856,-34.890542, 152.274856], [-34.12, 151.959052, -34.923036, 151.959052]]
+  #  disruption_points = [
+  #    ['Bondi Beach', -33.890542, 151.274856],
+  #    ['Coogee Beach', -33.923036, 151.259052],
+  #  ]
   def test_get_disruptions
     get '/get_disruptions'     
     data = JSON.parse(last_response.body, symbolize_keys: true)
