@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require 'pry'
 require_relative '../tims_parser'
 
 class TimsParserTest < Minitest::Spec
