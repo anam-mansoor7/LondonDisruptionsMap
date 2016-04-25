@@ -20,7 +20,7 @@ $(document).ready(function() {
       maxWidth: 160
     });
 
-  	var markers = new Array();
+    var markers = new Array();
         
     for (var i = 0; i < locations.length; i++) {  
       var marker = new google.maps.Marker({
@@ -64,22 +64,22 @@ $(document).ready(function() {
   }
 
   var get_disruptions_data = function() {
-	  $.ajax({
-	    type: 'GET',
-	    url: 'http://localhost:9292/get_disruptions',
-	    crossDomain: true,
-	    data: '',
-	    dataType: "json",
-	    success: function(responseData, textStatus, jqXHR) {
-	      // console.log('POST success.' + responseData['disruption_points']);
-	      draw_markers(responseData['disruption_points'])
-	      draw_polygon(responseData['effected_areas'])
-	    },
-	    error: function (responseData, textStatus, errorThrown) {
-	      // console.log('POST failed.' + textStatus);
-	    }
-	  })
-	;};
+    $.ajax({
+      type: 'GET',
+      url: 'http://localhost:9292/get_disruptions',
+      crossDomain: true,
+      data: '',
+      dataType: "json",
+      success: function(responseData, textStatus, jqXHR) {
+        // console.log('POST success.' + responseData['disruption_points']);
+        draw_markers(responseData['disruption_points'])
+        draw_polygon(responseData['effected_areas'])
+      },
+      error: function (responseData, textStatus, errorThrown) {
+        // console.log('POST failed.' + textStatus);
+      }
+    })
+  ;};
 
   get_disruptions_data();
   var interval = 1000 * 60 * 5; 
