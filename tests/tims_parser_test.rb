@@ -22,7 +22,7 @@ class TimsParserTest < Minitest::Spec
   end  
 
   def test_parse_coordinates
-  	content = "1,2"
+    content = "1,2"
     coordinates = @tims_parser.send(:parse_coordinates, content)
     assert coordinates.size.must_equal 2
     assert coordinates[0].must_equal "2"
@@ -35,11 +35,11 @@ class TimsParserTest < Minitest::Spec
   end
 
   def test_parse_street_coordinate_list
-  	disruption = @doc.root.css("Disruptions").children.first
-  	street_coordinates = @tims_parser.send(:get_street_coordinates, disruption)
+    disruption = @doc.root.css("Disruptions").children.first
+    street_coordinates = @tims_parser.send(:get_street_coordinates, disruption)
     coordinates = @tims_parser.send(:parse_street_coordinate_list, street_coordinates)
 
-  	assert coordinates.count.must_equal 28
-  	assert coordinates[0].must_equal "51.541478"
+    assert coordinates.count.must_equal 28
+    assert coordinates[0].must_equal "51.541478"
   end
 end
